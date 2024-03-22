@@ -11,35 +11,41 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  Widget? activeScreen;
-
-  @override
-  void initState() {
-    activeScreen = HomePage(switchScreen);
-    super.initState();
-  }
+  final List<String> selectedAnswers = [];
+  var activeScreen = 'home-page';
 
   void switchScreen() {
     setState(() {
-      activeScreen = const QuestionsPage();
+      activeScreen = 'questions-page';
     });
+  }
+
+  void chooseAnswers(String answer) {
+    selectedAnswers.add(answer);
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget screenWidget = HomePage(switchScreen);
+
+    if (activeScreen == 'questions-page') {
+      screenWidget = const QuestionsPage();
+    }
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
+              Color.fromARGB(255, 58, 1, 85),
               Color.fromARGB(255, 108, 8, 148),
-              Color.fromARGB(255, 58, 1, 85)
+              Color.fromARGB(255, 110, 4, 102)
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight
           ),
         ),
-        child: activeScreen,
+        child: screenWidget,
       ),
     );
   }

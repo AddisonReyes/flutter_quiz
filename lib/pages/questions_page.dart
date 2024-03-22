@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quiz/widgets/styled_text.dart';
+import 'package:flutter_quiz/widgets/answer_button.dart';
+import 'package:flutter_quiz/data/questions.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter_quiz/widgets/gradient_back.dart';
 
 class QuestionsPage extends StatefulWidget {
@@ -10,20 +12,49 @@ class QuestionsPage extends StatefulWidget {
 }
 
 class _QuestionsPageState extends State<QuestionsPage> {
+  var currentQuestionIndex = 0;
+
+  void answerQuestion() {
+    setState(() {
+      currentQuestionIndex++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 60,),
-              
-          StyledText(text: 'Learn Flutter The fun way!'),
-              
-          SizedBox(height: 30,),
-        ]
-      )
+    final currentQuestions = questions[currentQuestionIndex];
+
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        margin: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestions.text,
+              style: GoogleFonts.lato(
+                color: const Color.fromARGB(255, 201, 153, 251),
+                fontSize: 24,
+                fontWeight: FontWeight.bold
+              ),
+              textAlign: TextAlign.center,
+            ),
+                
+            const SizedBox(height: 30),
+      
+            ...currentQuestions.getShuffledAnswers().map(
+              (item){
+                return AnswerButton(
+                  text: item,
+                  onTap: answerQuestion, 
+                );
+              }
+            ),
+          ]
+        )
+      ),
     );
   }
 }
