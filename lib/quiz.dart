@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_quiz/pages/home_page.dart';
 import 'package:flutter_quiz/pages/questions_page.dart';
-// import 'package:flutter_quiz/widgets/gradient_back.dart';
+import 'package:flutter_quiz/pages/home_page.dart';
+import 'package:flutter_quiz/data/questions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_quiz/pages/result_page.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -11,7 +12,7 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  final List<String> selectedAnswers = [];
+  List<String> selectedAnswers = [];
   var activeScreen = 'home-page';
 
   void switchScreen() {
@@ -22,6 +23,13 @@ class _QuizState extends State<Quiz> {
 
   void chooseAnswers(String answer) {
     selectedAnswers.add(answer);
+
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        // selectedAnswers = [];
+        activeScreen = 'result-page';
+      });
+    }
   }
 
   @override
@@ -29,7 +37,11 @@ class _QuizState extends State<Quiz> {
     Widget screenWidget = HomePage(switchScreen);
 
     if (activeScreen == 'questions-page') {
-      screenWidget = const QuestionsPage();
+      screenWidget = QuestionsPage(onSelectAnswer: chooseAnswers);
+    }
+
+    if (activeScreen == 'result-page') {
+      screenWidget = ResultsPage(chosenAnswers: selectedAnswers,);
     }
 
     return Scaffold(

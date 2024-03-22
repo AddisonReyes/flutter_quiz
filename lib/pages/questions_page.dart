@@ -5,7 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter_quiz/widgets/gradient_back.dart';
 
 class QuestionsPage extends StatefulWidget {
-  const QuestionsPage({super.key});
+  final void Function(String answer) onSelectAnswer;
+  
+  const QuestionsPage({
+    super.key, 
+    required this.onSelectAnswer
+  });
 
   @override
   State<QuestionsPage> createState() => _QuestionsPageState();
@@ -14,7 +19,9 @@ class QuestionsPage extends StatefulWidget {
 class _QuestionsPageState extends State<QuestionsPage> {
   var currentQuestionIndex = 0;
 
-  void answerQuestion() {
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
+
     setState(() {
       currentQuestionIndex++;
     });
@@ -48,7 +55,9 @@ class _QuestionsPageState extends State<QuestionsPage> {
               (item){
                 return AnswerButton(
                   text: item,
-                  onTap: answerQuestion, 
+                  onTap: () {
+                    answerQuestion(item);
+                  }, 
                 );
               }
             ),
