@@ -12,7 +12,7 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  List<String> selectedAnswers = [];
+  List<String> _selectedAnswers = [];
   var activeScreen = 'home-page';
 
   void switchScreen() {
@@ -22,11 +22,10 @@ class _QuizState extends State<Quiz> {
   }
 
   void chooseAnswers(String answer) {
-    selectedAnswers.add(answer);
+    _selectedAnswers.add(answer);
 
-    if (selectedAnswers.length == questions.length) {
+    if (_selectedAnswers.length == questions.length) {
       setState(() {
-        // selectedAnswers = [];
         activeScreen = 'result-page';
       });
     }
@@ -37,25 +36,25 @@ class _QuizState extends State<Quiz> {
     Widget screenWidget = HomePage(switchScreen);
 
     if (activeScreen == 'questions-page') {
+      _selectedAnswers = [];
       screenWidget = QuestionsPage(onSelectAnswer: chooseAnswers);
     }
 
     if (activeScreen == 'result-page') {
-      screenWidget = ResultsPage(chosenAnswers: selectedAnswers,);
+      screenWidget = ResultsPage(
+        chosenAnswers: _selectedAnswers,
+        onPressed: switchScreen,
+      );
     }
 
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(255, 58, 1, 85),
-              Color.fromARGB(255, 108, 8, 148),
-              Color.fromARGB(255, 110, 4, 102)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight
-          ),
+          gradient: LinearGradient(colors: [
+            Color.fromARGB(255, 58, 1, 85),
+            Color.fromARGB(255, 108, 8, 148),
+            Color.fromARGB(255, 110, 4, 102)
+          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
         ),
         child: screenWidget,
       ),
